@@ -6,6 +6,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "vpmApp/vpmAppCmds/FapViewCtrlCmds.H"
+#include "vpmApp/vpmAppUAMap/FapUAViewSettings.H"
 #include "vpmApp/vpmAppUAMap/vpmAppUAMapHandlers/FapUACommandHandler.H"
 #include "FFuLib/FFuAuxClasses/FFuaCmdItem.H"
 #include "FFaLib/FFaDynCalls/FFaDynCB.H"
@@ -108,31 +109,31 @@ void FapViewCtrlCmds::init()
   cmdItem = new FFuaCmdItem("cmdId_viewCtrl_symbolSize0001");
   cmdItem->setText("0.001");
   cmdItem->setToolTip("Symbol Size");
-  cmdItem->setActivatedCB(FFaDynCB0S(FapViewCtrlCmds::symbolSize0001));
+  cmdItem->setActivatedCB(FFaDynCB0S([](){FapViewCtrlCmds::symbolSize(0.001);}));
   cmdItem->setGetSensitivityCB(FFaDynCB1S(FapCmdsBase::isModellerActive,bool&));
 
   cmdItem = new FFuaCmdItem("cmdId_viewCtrl_symbolSize001");
   cmdItem->setText("0.01");
   cmdItem->setToolTip("Symbol Size");
-  cmdItem->setActivatedCB(FFaDynCB0S(FapViewCtrlCmds::symbolSize001));
+  cmdItem->setActivatedCB(FFaDynCB0S([](){FapViewCtrlCmds::symbolSize(0.01);}));
   cmdItem->setGetSensitivityCB(FFaDynCB1S(FapCmdsBase::isModellerActive,bool&));
 
   cmdItem = new FFuaCmdItem("cmdId_viewCtrl_symbolSize01");
   cmdItem->setText("0.1 (default)");
   cmdItem->setToolTip("Symbol Size");
-  cmdItem->setActivatedCB(FFaDynCB0S(FapViewCtrlCmds::symbolSize01));
+  cmdItem->setActivatedCB(FFaDynCB0S([](){FapViewCtrlCmds::symbolSize(0.1);}));
   cmdItem->setGetSensitivityCB(FFaDynCB1S(FapCmdsBase::isModellerActive,bool&));
 
   cmdItem = new FFuaCmdItem("cmdId_viewCtrl_symbolSize1");
   cmdItem->setText("1");
   cmdItem->setToolTip("Symbol Size");
-  cmdItem->setActivatedCB(FFaDynCB0S(FapViewCtrlCmds::symbolSize1));
+  cmdItem->setActivatedCB(FFaDynCB0S([](){FapViewCtrlCmds::symbolSize(1.0);}));
   cmdItem->setGetSensitivityCB(FFaDynCB1S(FapCmdsBase::isModellerActive,bool&));
 
   cmdItem = new FFuaCmdItem("cmdId_viewCtrl_symbolSize10");
   cmdItem->setText("10");
   cmdItem->setToolTip("Symbol Size");
-  cmdItem->setActivatedCB(FFaDynCB0S(FapViewCtrlCmds::symbolSize10));
+  cmdItem->setActivatedCB(FFaDynCB0S([](){FapViewCtrlCmds::symbolSize(10.0);}));
   cmdItem->setGetSensitivityCB(FFaDynCB1S(FapCmdsBase::isModellerActive,bool&));
 
   // Views
@@ -443,6 +444,8 @@ void FapViewCtrlCmds::isometricView()
 void FapViewCtrlCmds::symbolSize(double newSize)
 {
   FmDB::getActiveViewSettings()->setSymbolScale(newSize);
+  FapUAExistenceHandler* uav = FapUAExistenceHandler::getFirstOfType(FapUAViewSettings::getClassTypeID());
+  if (uav) static_cast<FapUAViewSettings*>(uav)->updateUIValues();
 }
 //----------------------------------------------------------------------------
 

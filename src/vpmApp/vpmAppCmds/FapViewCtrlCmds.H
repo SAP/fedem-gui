@@ -57,11 +57,6 @@ private:
   static void isometricView();
 
   static void symbolSize(double newSize);
-  static void symbolSize0001() { symbolSize(0.001); }
-  static void symbolSize001()  { symbolSize(0.01); }
-  static void symbolSize01()   { symbolSize(0.1); }
-  static void symbolSize1()    { symbolSize(1.0); }
-  static void symbolSize10()   { symbolSize(10.0); }
 
 private:
   friend class FFaInitialisation<FapViewCtrlCmds>;
