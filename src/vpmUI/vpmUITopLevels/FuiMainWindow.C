@@ -16,7 +16,7 @@
 
 FuiMainWindow::FuiMainWindow()
 {
-  this->menuBar = NULL;
+  this->mainMenuBar = NULL;
   this->toolBars.fill(NULL);
   this->workSpace = NULL;
   this->properties = NULL;
@@ -31,6 +31,8 @@ void FuiMainWindow::initWidgets()
   this->toolBars[WINDOWS]->setBarLabel("Windows");
   this->toolBars[SOLVE]->setBarLabel("Solvers");
   this->toolBars[VIEWCTRL]->setBarLabel("Zoom and Pan");
+  this->toolBars[VIEWCTRL1]->setBarLabel("Zoom");
+  this->toolBars[VIEWCTRL2]->setBarLabel("Zoom and Pan");
   this->toolBars[THREEDVIEWS]->setBarLabel("3D View Control");
   this->toolBars[MECHWIND]->setBarLabel("Windpower Tools");
   this->toolBars[MECHCREATE]->setBarLabel("Mechanism Creation");
@@ -45,11 +47,11 @@ void FuiMainWindow::initWidgets()
 
 void FuiMainWindow::setUICommands(const FFuaUICommands* commands)
 {
-  this->menuBar->deleteItems();
+  this->mainMenuBar->deleteItems();
 
   const FuaMainWindowCommands* cmds = static_cast<const FuaMainWindowCommands*>(commands);
   for (FFuaCmdItem* cmd : cmds->menuBar)
-    this->menuBar->insertCmdItem(cmd);
+    this->mainMenuBar->insertCmdItem(cmd);
 
   for (size_t b = 0; b < this->toolBars.size(); b++) {
     this->toolBars[b]->clearBar();
@@ -62,7 +64,7 @@ void FuiMainWindow::setUICommands(const FFuaUICommands* commands)
 void FuiMainWindow::updateUICommandsSensitivity(const FFuaUICommands* commands)
 {
   for (FFuaCmdItem* cmd : static_cast<const FuaMainWindowCommands*>(commands)->menuBar)
-    this->menuBar->updateCmdItem(cmd,true);
+    this->mainMenuBar->updateCmdItem(cmd,true);
 
   for (FFuToolBar* toolbar : this->toolBars)
     toolbar->updateSensitivityOnAll();
@@ -72,7 +74,7 @@ void FuiMainWindow::updateUICommandsSensitivity(const FFuaUICommands* commands)
 void FuiMainWindow::updateUICommandsToggle(const FFuaUICommands* commands)
 {
   for (FFuaCmdItem* cmd : static_cast<const FuaMainWindowCommands*>(commands)->menuBar)
-    this->menuBar->updateCmdItem(cmd,false);
+    this->mainMenuBar->updateCmdItem(cmd,false);
 
   for (FFuToolBar* toolbar : this->toolBars)
     toolbar->updateToggleOnAll();

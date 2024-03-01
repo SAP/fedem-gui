@@ -850,6 +850,30 @@ void Fui::modellerUI(bool onScreen, bool inMem)
     }
 
   if (uic) uic->manage(onScreen,inMem);
+
+  // Show 3D views toolbar
+  mainWindow->showToolBar(FuiMainWindow::THREEDVIEWS, onScreen);
+  // Show view control toolbar including zoom-to
+  if (mainWindow->isToolBarShown(FuiMainWindow::VIEWCTRL))
+  {
+    if (!onScreen)
+    {
+      // Hide the zoom-to button
+      mainWindow->showToolBar(FuiMainWindow::VIEWCTRL, false);
+      mainWindow->showToolBar(FuiMainWindow::VIEWCTRL2, true);
+    }
+  }
+  else if (mainWindow->isToolBarShown(FuiMainWindow::VIEWCTRL2))
+  {
+    if (onScreen)
+    {
+      // Show the zoom-to button
+      mainWindow->showToolBar(FuiMainWindow::VIEWCTRL2, false);
+      mainWindow->showToolBar(FuiMainWindow::VIEWCTRL, true);
+    }
+  }
+  else
+    mainWindow->showToolBar(FuiMainWindow::VIEWCTRL1, onScreen);
 }
 
 
@@ -869,10 +893,8 @@ void Fui::ctrlModellerUI(bool onScreen, bool inMem)
   if (uic) uic->manage(onScreen,inMem);
 
   // Show toolbars (control design and creation)
-  if (onScreen) {
-    mainWindow->showToolBar(/*CTRLCREATE*/ 8, true);
-    mainWindow->showToolBar(/*CTRLMODELLINGTOOLS*/ 9, true);
-  }
+  mainWindow->showToolBar(FuiMainWindow::CTRLCREATE, onScreen);
+  mainWindow->showToolBar(FuiMainWindow::CTRLMODELLINGTOOLS, onScreen);
 }
 
 

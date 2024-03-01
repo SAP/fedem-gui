@@ -61,6 +61,8 @@ public:
     MECHMODELLINGTOOLS,
     CTRLCREATE,
     CTRLMODELLINGTOOLS,
+    VIEWCTRL1,
+    VIEWCTRL2,
     NTOOLBARS};
 
 public:
@@ -116,7 +118,7 @@ private:
 
 protected:
   // component "shadow" members
-  FFuMenuBar* menuBar;
+  FFuMenuBar* mainMenuBar;
   std::array<FFuToolBar*,NTOOLBARS> toolBars;
 
   FuiWorkSpace* workSpace;

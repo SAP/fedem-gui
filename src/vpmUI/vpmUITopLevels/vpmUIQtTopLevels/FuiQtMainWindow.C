@@ -53,46 +53,43 @@ FuiQtMainWindow::FuiQtMainWindow()
 
   this->setWidget(this);
 
-  FFuQtMenuBar* qmbar;
-  FFuQtToolBar* qtbar;
-
-  this->FuiMainWindow::menuBar = qmbar = new FFuQtMenuBar(this);
+  FFuQtMenuBar* qmbar = new FFuQtMenuBar(this);
+  this->mainMenuBar = qmbar;
   this->setMenuBar(qmbar);
 
-  this->FuiMainWindow::toolBars[STD] = qtbar = new FFuQtToolBar(this);
-  this->addToolBar(Qt::TopToolBarArea, qtbar);
-  this->FuiMainWindow::toolBars[WINDOWS] = qtbar = new FFuQtToolBar(this);
-  this->addToolBar(Qt::TopToolBarArea, qtbar);
-  this->FuiMainWindow::toolBars[THREEDVIEWS] = qtbar = new FFuQtToolBar(this);
-  this->addToolBar(Qt::TopToolBarArea, qtbar);
+  // Lambda function for creating a new toolbar
+  auto&& newToolBar = [this](Qt::ToolBarArea where)
+  {
+    FFuQtToolBar* qtbar = new FFuQtToolBar(this);
+    this->addToolBar(where,qtbar);
+    return qtbar;
+  };
 
+  this->toolBars[STD]                = newToolBar(Qt::TopToolBarArea);
+  this->toolBars[WINDOWS]            = newToolBar(Qt::TopToolBarArea);
+  this->toolBars[THREEDVIEWS]        = newToolBar(Qt::TopToolBarArea);
   this->addToolBarBreak(Qt::TopToolBarArea);
-
-  this->FuiMainWindow::toolBars[MECHWIND] = qtbar = new FFuQtToolBar(this);
-  this->addToolBar(Qt::TopToolBarArea, qtbar);
-  this->FuiMainWindow::toolBars[MECHCREATE] = qtbar = new FFuQtToolBar(this);
-  this->addToolBar(Qt::TopToolBarArea, qtbar);
-  this->FuiMainWindow::toolBars[MECHMODELLINGTOOLS] = qtbar = new FFuQtToolBar(this);
-  this->addToolBar(Qt::TopToolBarArea, qtbar);
-  this->FuiMainWindow::toolBars[VIEWCTRL] = qtbar = new FFuQtToolBar(this);
-  this->addToolBar(Qt::TopToolBarArea, qtbar);
-
+  this->toolBars[MECHWIND]           = newToolBar(Qt::TopToolBarArea);
+  this->toolBars[MECHCREATE]         = newToolBar(Qt::TopToolBarArea);
+  this->toolBars[MECHMODELLINGTOOLS] = newToolBar(Qt::TopToolBarArea);
+  this->toolBars[VIEWCTRL]           = newToolBar(Qt::TopToolBarArea);
+  this->toolBars[VIEWCTRL1]          = newToolBar(Qt::TopToolBarArea);
+  this->toolBars[VIEWCTRL2]          = newToolBar(Qt::TopToolBarArea);
   this->addToolBarBreak(Qt::TopToolBarArea);
-
 #ifdef FT_HAS_SOLVERS
-  Qt::ToolBarArea ctrlArea = Qt::TopToolBarArea;
+  this->toolBars[CTRLCREATE]         = newToolBar(Qt::TopToolBarArea);
+  this->toolBars[CTRLMODELLINGTOOLS] = newToolBar(Qt::TopToolBarArea);
 #else
-  Qt::ToolBarArea ctrlArea = Qt::RightToolBarArea;
+  this->toolBars[CTRLCREATE]         = newToolBar(Qt::RightToolBarArea);
+  this->toolBars[CTRLMODELLINGTOOLS] = newToolBar(Qt::RigthToolBarArea);
 #endif
-  this->FuiMainWindow::toolBars[CTRLCREATE] = qtbar = new FFuQtToolBar(this);
-  this->addToolBar(ctrlArea, qtbar);
-  qtbar->popDown();
-  this->FuiMainWindow::toolBars[CTRLMODELLINGTOOLS] = qtbar = new FFuQtToolBar(this);
-  this->addToolBar(ctrlArea, qtbar);
-  qtbar->popDown();
+  this->toolBars[SOLVE]              = newToolBar(Qt::RightToolBarArea);
 
-  this->FuiMainWindow::toolBars[SOLVE] = qtbar = new FFuQtToolBar(this);
-  this->addToolBar(Qt::RightToolBarArea, qtbar);
+  this->toolBars[VIEWCTRL]->popDown();
+  this->toolBars[VIEWCTRL1]->popDown();
+  this->toolBars[VIEWCTRL2]->popDown();
+  this->toolBars[CTRLCREATE]->popDown();
+  this->toolBars[CTRLMODELLINGTOOLS]->popDown();
 
   this->myStatusLabel = new QLabel(this->QMainWindow::statusBar());
   this->QMainWindow::statusBar()->addWidget(this->myStatusLabel,3);

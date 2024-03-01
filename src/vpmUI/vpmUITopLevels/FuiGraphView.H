@@ -35,7 +35,7 @@ public:
   }
 
   //zoom & shift
-  virtual void zoomAll();
+  void zoomAll();
   void zoomIn() {this->zoomPlotterIn();}
   void zoomOut() {this->zoomPlotterOut();}
   void zoomWindow() {this->zoomPlotterWindow();}
@@ -67,7 +67,7 @@ protected:
 
   // These methods are called every time a view pops up/down, also
   // from an iconified position
-  virtual void onPoppedUp() {}
+  virtual void onPoppedUp();
   virtual void onPoppedDown() {}
 
   // to/from memory only
@@ -94,14 +94,16 @@ public:
                               const char* title= "Fedem Graph",
                               const char* name = "FuiGraphViewTLS");
 
-public:
   FuiGraphView* getGraphViewComp() { return this->graphView; }
 
-  virtual bool onClose() { this->invokeFinishedCB(); return false; }
+  virtual bool onClose();
+
+protected:
+  virtual void placeWidgets(int width, int height);
+  virtual void onPoppedUp() { ++numInstance; }
 
 private:
-  virtual void placeWidgets(int width, int height);
-  virtual void onPoppedDownToMem() {}
+  static short int numInstance;
 
 protected:
   FuiGraphView* graphView;

@@ -730,6 +730,12 @@ FFuaUICommands* FapUAMainWindow::getCommands()
   cmds->toolBars[FuiMainWindow::VIEWCTRL].push_back(FFuaCmdItem::getCmdItem("cmdId_viewCtrl_shiftUp"));
   cmds->toolBars[FuiMainWindow::VIEWCTRL].push_back(FFuaCmdItem::getCmdItem("cmdId_viewCtrl_shiftDown"));
 
+  // Make two extra tool bars, for when only the modeler view or graph views, respectively, are open
+  cmds->toolBars[FuiMainWindow::VIEWCTRL1] = { cmds->toolBars[FuiMainWindow::VIEWCTRL][0],
+                                               cmds->toolBars[FuiMainWindow::VIEWCTRL][1] };
+  cmds->toolBars[FuiMainWindow::VIEWCTRL2] = cmds->toolBars[FuiMainWindow::VIEWCTRL];
+  cmds->toolBars[FuiMainWindow::VIEWCTRL2].erase(cmds->toolBars[FuiMainWindow::VIEWCTRL2].begin()+1);
+
   //3DVIEWS TOOLBAR
   cmds->toolBars[FuiMainWindow::THREEDVIEWS].clear();
 
@@ -750,7 +756,7 @@ FFuaUICommands* FapUAMainWindow::getCommands()
   this->threedSymbolSizeHeader.clear();
   this->threedSymbolSizeHeader.setText("Symbol Size");
   this->threedSymbolSizeHeader.setSmallIcon(symbolSize_xpm);
-  this->threedSymbolSizeHeader.setToolTip("Symbol Size");
+  this->threedSymbolSizeHeader.setToolTip("Set symbol Size");
   cmds->toolBars[FuiMainWindow::THREEDVIEWS].push_back(&this->separator);
   cmds->toolBars[FuiMainWindow::THREEDVIEWS].push_back(&this->threedSymbolSizeHeader);
   this->threedSymbolSizeHeader.push_back(FFuaCmdItem::getCmdItem("cmdId_viewCtrl_symbolSize0001"));

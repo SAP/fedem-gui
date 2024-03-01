@@ -6,9 +6,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "vpmUI/vpmUITopLevels/FuiGraphView.H"
+#include "vpmUI/vpmUITopLevels/FuiMainWindow.H"
+#include "vpmUI/Fui.H"
 
 
 Fmd_SOURCE_INIT(FUI_GRAPHVIEWTLS, FuiGraphViewTLS, FFuMDIWindow);
+
+short int FuiGraphViewTLS::numInstance = 0;
 
 //----------------------------------------------------------------------------
 
@@ -154,7 +158,35 @@ void FuiGraphView::onAxisScaleChanged()
 }
 //----------------------------------------------------------------------------
 
+void FuiGraphView::onPoppedUp()
+{
+  FuiMainWindow* mainWindow = Fui::getMainWindow();
+  bool haveZoomOnly = mainWindow->isToolBarShown(FuiMainWindow::VIEWCTRL1);
+  mainWindow->showToolBar(FuiMainWindow::VIEWCTRL1, false);
+  if (haveZoomOnly)
+    mainWindow->showToolBar(FuiMainWindow::VIEWCTRL, true);
+  else if (!mainWindow->isToolBarShown(FuiMainWindow::VIEWCTRL))
+    mainWindow->showToolBar(FuiMainWindow::VIEWCTRL2, true);
+}
+//----------------------------------------------------------------------------
+
 void FuiGraphViewTLS::placeWidgets(int width, int height)
 {
   this->graphView->setEdgeGeometry(0,width,0,height);
+}
+//----------------------------------------------------------------------------
+
+bool FuiGraphViewTLS::onClose()
+{
+  this->invokeFinishedCB();
+  if (--numInstance < 1)
+  {
+    FuiMainWindow* mainWindow = Fui::getMainWindow();
+    bool haveZoomAndPan = mainWindow->isToolBarShown(FuiMainWindow::VIEWCTRL);
+    mainWindow->showToolBar(FuiMainWindow::VIEWCTRL, false);
+    mainWindow->showToolBar(FuiMainWindow::VIEWCTRL2, false);
+    if (haveZoomAndPan)
+      mainWindow->showToolBar(FuiMainWindow::VIEWCTRL1, true);
+  }
+  return false;
 }
